@@ -1,0 +1,278 @@
+<!-- 
+    "Primal Being Token"
+    Rock/LIGHT/Level 11/
+    ATK/ sum   DEF/ sum
+    -----------------------
+    - ATK #### | DEF #### [-]
+
+
+    -----------------------
+    |ATK #### |DEF #### |+|
+    -----------------------
+    numpad
+ -->
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone"
+      rel="stylesheet">
+        <style>
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            /* Firefox */
+            input[type=number] {
+                -moz-appearance: textfield;
+            }
+            #container {
+                width: 100%;
+                max-width: 400px;
+                margin: auto;
+            }
+            .title {
+                text-align: center;
+                font-variant: small-caps;
+                font-weight: bold;
+
+            }
+            .the {
+                position: relative;
+                top: 20px;
+                left: -145
+            }
+            .nibiru {
+                font-size: 45px;
+f            }
+            #canvas {
+                width: 100%;
+            }
+            .entryList {
+                width: 100%;
+                box-sizing: border-box;
+                border: 3px solid black;
+                border-spacing: 0px;
+            }
+            .entryList td:nth-child(1),
+            .entryList td:nth-child(6){
+                text-align:center;
+            }
+            .entryList td:nth-child(2),
+            .entryList td:nth-child(3),
+            .entryList td:nth-child(4),
+            .entryList td:nth-child(5){
+                text-align:right;
+            }
+            .statTitle {
+                border-left: 3px solid transparent;
+            }
+            .inputs {
+                background-color: gray;
+            }
+            .inputField {
+                background-color: lightgray;
+                color: black;
+                text-align: right;
+            }
+            input[type='number']{
+                width: 60px;
+                height: 21px;
+                font-family: "Times New Roman";
+                font-size: 16px;
+            }
+            ::placeholder {
+                color: black;
+                opacity: 1; /* Firefox */
+            }
+            ::-ms-input-placeholder { /* Edge 12-18 */
+                color: black;
+            }
+            .entryList .entryItem td:nth-child(odd) {
+                padding-right: 4px;
+                font-size: 16px;
+
+            }
+            .delBtn {
+                display: inline;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+        <div class="parent title" style="position: relative">
+            <div class="the">THE</div>
+            <div class="nibiru">Nibiru Calculator</div>
+        </div>
+            <td><canvas id="canvas" width="700" height="1018"></canvas></td>
+            <hr/>
+            <table id="entryList" class="entryList">
+                <thead>
+                    <tr id="inputs" class="inputs">
+                        <td class="inputFieldTitle">ENTER STATS:</td>
+                        <td class="statTitle">ATK/</td>
+                        <td><input type="number" id="atkInput" class="inputField" placeholder="0" 
+                            oninput="this.value = Number(this.value.replace(/[^0-9]/, ''))" /></td>
+                        <td class="statTitle">DEF/</td>
+                        <td><input type="number" id="defInput" class="inputField" placeholder="0" 
+                            oninput="this.value = Number(this.value.replace(/[^0-9]/, ''))" /></td>
+                        <td id="addBtnCell"></td>
+                    </tr>
+                </thead>
+                <tbody style="width:100%"></tbody>
+            </table>
+        </div>
+        <script>
+            const inputs = document.getElementById("inputs")
+            const atkInput = document.querySelector('#atkInput')
+            const defInput = document.querySelector('#defInput')
+            const addBtnCell = document.querySelector('#addBtnCell')
+            const nibiruAtkDef = document.querySelector('#nibiruAtkDef')
+            const entryList = document.querySelector('#entryList tbody')
+            
+            let nibiruAtk = 0
+            let nibiruDef = 0
+// Generates the image of the token card and its battle summed stats which update automatically.
+            const img = new Image()
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d')
+            const updateImg = ()=>{
+                ctx.drawImage(img,0,0)
+                ctx.font = "bold 29px Ariel"
+                ctx.textAlign = "right"
+                ctx.fillText("ATK/", 415, 950)      // The card's displayed "ATK/" lable
+                ctx.fillText("DEF/", 566, 950)      // The card's displayed "DEF/" lable
+                ctx.fillText(nibiruAtk, 488, 950)   // The card's displayed ATK number value
+                ctx.fillText(nibiruDef, 639, 950)   // The card's displayed DEF number value
+            }
+// Blueprint for the add and delete buttons inlcuding the correct icons based on the button type.
+            const createIconBtn = (iconName)=>{
+                    const btn = document.createElement("button")
+                    const icon = document.createElement("span")
+                    icon.className = "material-icons-two-tone"
+                    icon.innerHTML = iconName
+                    btn.append(icon)
+                    return btn
+            }
+
+            const addEntryItem = (atkSelect,defSelect)=>{
+                const entryItem = createEntryItem(atkSelect,defSelect,()=>{
+                    nibiruAtk -= atkSelect
+                    nibiruDef -= defSelect
+                    updateImg()
+                    atkInput.focus()
+                })
+
+                entryList.append(entryItem)
+                
+                nibiruAtk += atkSelect
+                nibiruDef += defSelect
+
+                atkInput.value = ""
+                defInput.value = ""
+
+                updateImg()
+                atkInput.focus()
+                }
+// Adds a new listing of a monster's ATK and DEF stats including the duplicate and delete buttons.
+            const createEntryItem = (atk,def,onDelete)=>{
+                const entryItem = document.createElement("tr")
+                entryItem.className = "entryItem"
+
+                const dupBtn = createIconBtn("content_copy")
+                dupBtn.className = "dupBtn"
+                dupBtn.title = "Duplicate"
+                dupBtn.addEventListener('click',()=>{
+                    addEntryItem(atk,def)
+                })
+
+                const duplicate = document.createElement("td")
+                duplicate.append(dupBtn)
+                entryItem.append(duplicate)
+
+                const atkLbl = document.createElement("td")
+                atkLbl.append("ATK/")
+                entryItem.append(atkLbl)
+    
+                const atkSt = document.createElement("td") 
+                atkSt.append(atk)
+                entryItem.append(atkSt)
+    
+                const defLbl = document.createElement("td") 
+                defLbl.append("DEF/")
+                entryItem.append(defLbl)
+    
+                const defSt = document.createElement("td") 
+                defSt.append(def)
+                entryItem.append(defSt)
+                               
+                const delBtn = createIconBtn("delete")
+                delBtn.className = "delBtn"
+                delBtn.title = "Delete"
+                delBtn.addEventListener('click', ()=>{
+                    entryItem.remove()
+                    onDelete()
+                })
+
+                const trash = document.createElement("td")
+                trash.append(delBtn)
+                entryItem.append(trash)
+                return entryItem
+            }
+            
+            const addBtn = createIconBtn("add_box")
+            addBtn.title = "Add"
+            addBtnCell.append(addBtn)
+            addBtn.addEventListener('click', ()=>{
+
+                const atkDelta = Number(atkInput.value) || 0
+                const defDelta = Number(defInput.value) || 0
+
+                addEntryItem(atkDelta,defDelta) // come back to it...
+            })
+
+            atkInput.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault()
+                    defInput.focus()
+                }
+            })
+            defInput.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault()
+                    addBtn.click()
+                }
+            })
+            const arrowKey = (event)=>{
+                if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+                    event.preventDefault()
+                }
+            }
+            atkInput.addEventListener("keydown", arrowKey)
+            defInput.addEventListener("keydown", arrowKey)
+            atkInput.addEventListener("wheel", (event)=> {
+            event.preventDefault()
+            })
+            
+            img.addEventListener("load", updateImg)
+            img.src = "Primal Being Token edited 2.png"
+            atkInput.focus()
+            
+            // make it fit any screen
+            // - this is going to require CSS (in particular, @media (at-rule media queries)
+            // - always make it fit small screens first, then adjust the styling with @media queries 
+            // to fit larger screens (this is called mobile first design)
+
+            // have the delBtn right-alligned
+            // - This will probably be CSS using flexbox
+            // make all ATK and DEF equally spaced from each other
+            // - This will probably be CSS using flexbox
+            // make a "generate token" button to show an image of the token with its calculated stats
+            // - this will be tricky. Either you will have an image and add elements on top of it that 
+            // hold the text for the atk and def
+            // - or you could use an SVG
+            // - or you could use a canvas and actually draw in pixels (which would allow the user to 
+            // copy/paste the image with the atk def)
+        </script>
+    </body>
+</html>
