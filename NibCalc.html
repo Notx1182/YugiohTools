@@ -1,8 +1,10 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone"
-      rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet">
         <style>
             /* Chrome, Safari, Edge, Opera */
             input::-webkit-outer-spin-button,
@@ -14,6 +16,12 @@
             input[type=number] {
                 -moz-appearance: textfield;
             }
+            body, input {
+                font-family: "DM Serif Text", serif;
+            }
+            body {
+                margin-top: 0;
+            }
             #container {
                 width: 100%;
                 max-width: 400px;
@@ -22,14 +30,13 @@
             .title {
                 text-align: center;
                 font-variant: small-caps;
-                font-weight: bold;
-                font-family: "Times New Roman";
             }
             .title .the {
-                position: relative;
+                position: absolute;
                 text-align: left;
-                top: 20px;
-                left: 50px;
+                width: min-content;
+                top: 5px;
+                left: 71px;
             }
             .nibiru {
                 font-size: 45px;
@@ -44,17 +51,23 @@
                 border-spacing: 0px;
             }
             .entryList td:nth-child(1),
-            .entryList td:nth-child(6){
+            .entryList td:nth-child(4){
                 text-align:center;
             }
             .entryList td:nth-child(2),
-            .entryList td:nth-child(3),
-            .entryList td:nth-child(4),
-            .entryList td:nth-child(5){
+            .entryList td:nth-child(3){
                 text-align:right;
             }
             .statTitle {
                 border-left: 3px solid transparent;
+                padding: 3px;
+            }
+            .statSlash {
+                font-weight:bolder;
+                color: transparent;
+                font-size: 14px;
+                padding-right: 5px;
+                text-shadow: 0.5px -1.5px black, 1px -1.5px black;
             }
             .inputs {
                 background-color: gray;
@@ -67,7 +80,6 @@
             input[type='number']{
                 width: 60px;
                 height: 21px;
-                font-family: "Times New Roman";
                 font-size: 16px;
             }
             ::placeholder {
@@ -78,11 +90,30 @@
                 color: black;
             }
             .entryList .entryItem td:nth-child(odd) {
-                padding-right: 4px;
                 font-size: 16px;
+            }
+            .entryStat {
+                box-sizing: border-box;
+                padding: 4px 6px;
+                display: inline-block;
+                width: 60px;
+                text-align: right;
+                margin-left: 2px;
             }
             .delBtn {
                 display: inline;
+            }
+            button {
+                background: none;
+                border: none;
+                border-radius: 5px;
+                padding: 2px 10px;
+            }
+            button:hover {
+                background: rgba(0,0,0,0.2)
+            }
+            button:active {
+                background: rgba(0,0,0,0.4)
             }
         </style>
     </head>
@@ -98,11 +129,9 @@
                 <thead>
                     <tr id="inputs" class="inputs">
                         <td class="inputFieldTitle">ENTER STATS:</td>
-                        <td class="statTitle">ATK/</td>
-                        <td><input type="number" id="atkInput" class="inputField" placeholder="0" 
+                        <td class="statTitle">ATK<span class="statSlash">/</span><input type="number" id="atkInput" class="inputField" placeholder="0" 
                             oninput="this.value = Number(this.value.replace(/[^0-9]/, ''))" /></td>
-                        <td class="statTitle">DEF/</td>
-                        <td><input type="number" id="defInput" class="inputField" placeholder="0" 
+                        <td class="statTitle">DEF<span class="statSlash">/</span><input type="number" id="defInput" class="inputField" placeholder="0" 
                             oninput="this.value = Number(this.value.replace(/[^0-9]/, ''))" /></td>
                         <td id="addBtnCell"></td>
                     </tr>
@@ -126,7 +155,7 @@
             const ctx = canvas.getContext('2d')
             const updateImg = ()=>{
                 ctx.drawImage(img,0,0)
-                ctx.font = "bold 29px Ariel"
+                ctx.font = "30px DM Serif Text"
                 ctx.textAlign = "right"
                 ctx.fillText("ATK/", 415, 950)      // The card's displayed "ATK/" lable
                 ctx.fillText("DEF/", 566, 950)      // The card's displayed "DEF/" lable
@@ -179,20 +208,22 @@
                 entryItem.append(duplicate)
 
                 const atkLbl = document.createElement("td")
-                atkLbl.append("ATK/")
+                atkLbl.innerHTML = "ATK<span class='statSlash'>/</span>"
                 entryItem.append(atkLbl)
     
-                const atkSt = document.createElement("td") 
+                const atkSt = document.createElement("span")
+                atkSt.className = "entryStat" 
                 atkSt.append(atk)
-                entryItem.append(atkSt)
+                atkLbl.append(atkSt)
     
                 const defLbl = document.createElement("td") 
-                defLbl.append("DEF/")
+                defLbl.innerHTML = "DEF<span class='statSlash'>/</span>"
                 entryItem.append(defLbl)
     
-                const defSt = document.createElement("td") 
+                const defSt = document.createElement("span")
+                defSt.className = "entryStat" 
                 defSt.append(def)
-                entryItem.append(defSt)
+                defLbl.append(defSt)
                                
                 const delBtn = createIconBtn("delete")
                 delBtn.className = "delBtn"
