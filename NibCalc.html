@@ -65,9 +65,9 @@
             .statSlash {
                 font-weight:bolder;
                 color: transparent;
-                font-size: 14px;
+                font-size: 13px;
                 padding-right: 5px;
-                text-shadow: 0.5px -1.5px black, 1px -1.5px black;
+                text-shadow: 0.5px -2.2px black, 1px -2.2px black;
             }
             .inputs {
                 background-color: gray;
@@ -155,10 +155,15 @@
             const ctx = canvas.getContext('2d')
             const updateImg = ()=>{
                 ctx.drawImage(img,0,0)
-                ctx.font = "30px DM Serif Text"
                 ctx.textAlign = "right"
-                ctx.fillText("ATK/", 415, 950)      // The card's displayed "ATK/" lable
-                ctx.fillText("DEF/", 566, 950)      // The card's displayed "DEF/" lable
+                ctx.font = "normal 900 24px DM Serif Text"
+                ctx.fillText("/", 415, 946)      // The card's displayed "ATK/" lable
+                ctx.fillText("/", 566, 946)      // The card's displayed "DEF/" lable
+                ctx.fillText("/", 416, 946)      // The card's displayed "ATK/" lable
+                ctx.fillText("/", 567, 946)      // The card's displayed "DEF/" lable
+                ctx.font = "30px DM Serif Text"
+                ctx.fillText("ATK", 405, 950)      // The card's displayed "ATK/" lable
+                ctx.fillText("DEF", 556, 950)      // The card's displayed "DEF/" lable
                 ctx.fillText(nibiruAtk, 488, 950)   // The card's displayed ATK number value
                 ctx.fillText(nibiruDef, 639, 950)   // The card's displayed DEF number value
             }
@@ -177,7 +182,7 @@
                     nibiruAtk -= atkSelect
                     nibiruDef -= defSelect
                     updateImg()
-                    atkInput.focus()
+                    atkInput.focus({preventScroll:true})
                 })
 
                 entryList.append(entryItem)
@@ -189,7 +194,7 @@
                 defInput.value = ""
 
                 updateImg()
-                atkInput.focus()
+                atkInput.focus({preventScroll:true})
                 }
 // Adds a new listing of a monster's ATK and DEF stats including the duplicate and delete buttons.
             const createEntryItem = (atk,def,onDelete)=>{
@@ -253,7 +258,7 @@
             atkInput.addEventListener("keypress", function(event) {
                 if (event.key === "Enter") {
                     event.preventDefault()
-                    defInput.focus()
+                    defInput.focus({preventScroll:true})
                 }
             })
             defInput.addEventListener("keypress", function(event) {
@@ -275,7 +280,7 @@
             
             img.addEventListener("load", updateImg)
             img.src = "Primal Being Token edited 2.png"
-            atkInput.focus()
+            atkInput.focus({preventScroll:true})
             
             // make it fit any screen
             // - this is going to require CSS (in particular, @media (at-rule media queries)
