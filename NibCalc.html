@@ -67,7 +67,7 @@
                 color: transparent;
                 font-size: 13px;
                 padding-right: 5px;
-                text-shadow: 0.5px -2.2px black, 1px -2.2px black;
+                text-shadow: 0.5px -2.1px black, 1px -2.1px black;
             }
             .inputs {
                 background-color: gray;
@@ -156,16 +156,18 @@
             const updateImg = ()=>{
                 ctx.drawImage(img,0,0)
                 ctx.textAlign = "right"
-                ctx.font = "normal 900 24px DM Serif Text"
-                ctx.fillText("/", 415, 946)      // The card's displayed "ATK/" lable
-                ctx.fillText("/", 566, 946)      // The card's displayed "DEF/" lable
-                ctx.fillText("/", 416, 946)      // The card's displayed "ATK/" lable
-                ctx.fillText("/", 567, 946)      // The card's displayed "DEF/" lable
+                // // previous attempt to make the slashes on the card look true to the original; FAIL!
+                // ctx.font = "normal 900 24px DM Serif Text"
+                // ctx.fillText("/", 415, 946)          // The card's displayed "ATK/" Label
+                // ctx.fillText("/", 566, 946)          // The card's displayed "DEF/" Label
+                // ctx.fillText("/", 416, 946)          // The card's displayed "ATK/" Label
+                // ctx.fillText("/", 567, 946)          // The card's displayed "DEF/" Label
+                // ctx.font = "30px DM Serif Text"
+                // ctx.fillText("ATK", 405, 950)        // The card's displayed "ATK/" Label
+                // ctx.fillText("DEF", 556, 950)        // The card's displayed "DEF/" Label
                 ctx.font = "30px DM Serif Text"
-                ctx.fillText("ATK", 405, 950)      // The card's displayed "ATK/" lable
-                ctx.fillText("DEF", 556, 950)      // The card's displayed "DEF/" lable
-                ctx.fillText(nibiruAtk, 488, 950)   // The card's displayed ATK number value
-                ctx.fillText(nibiruDef, 639, 950)   // The card's displayed DEF number value
+                ctx.fillText(nibiruAtk, 488, 950)       // The card's displayed ATK number value
+                ctx.fillText(nibiruDef, 639, 950)       // The card's displayed DEF number value
             }
 // Blueprint for the add and delete buttons inlcuding the correct icons based on the button type.
             const createIconBtn = (iconName)=>{
@@ -279,7 +281,7 @@
             })
             
             img.addEventListener("load", updateImg)
-            img.src = "Primal Being Token edited 2.png"
+            img.src = "Primal Being Token edited 2.jpg"
             atkInput.focus({preventScroll:true})
             
             // make it fit any screen
